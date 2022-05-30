@@ -1,0 +1,30 @@
+{% extends 'root.html' %}
+
+{% block content %}
+
+    <div class="card mt-5">
+
+        <a class="btn btn-outline-success mt-3 ml-5 mr-5" href="{% url "course:course_create" %}" role="button">Create course</a>
+
+        <div class="card-group">
+
+            {% for course in object_list %}
+                <div class="col-md-4">
+                <div class="card mt-5 ml-3 ">
+
+                    <div class="card-body">
+                        <h5 class="card-title">{{ course.title }}</h5>
+                        <p class="card-text">{{ course.description }}</p>
+                        <p><a class="btn btn-primary" href="{% url "course:course_detail" pk=course.pk %}" role="button">More</a>
+                            <a class="btn btn-danger" href="{% url "course:course_delete" pk=course.pk %}" role="button">Delete</a></p>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted"> Start: {{ course.start }} Status: {{ course.status }}</small>
+                    </div>
+                </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

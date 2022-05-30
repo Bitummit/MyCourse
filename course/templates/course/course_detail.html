@@ -1,0 +1,27 @@
+{% extends 'root.html' %}
+
+{% block content %}
+<div class="container">
+
+    <div class="card mt-5">
+        <div class="card-body">
+            <h1 class="card-title text-center"> Course "{{ object.title }}"</h1>
+            <p class="card-text mt-3 ms-3" style="font-size: 1.2em">Duration: {{ object.duration }} months</p>
+            <p class="card-text mt-3 ms-3" style="font-size: 1.2em">Start: {{ object.start }} </p>
+            <p class="card-text mt-3 ms-3" style="font-size: 1.2em">Price: {{ object.price }} rub</p>
+            <p class="card-text mt-3 ms-3" style="font-size: 1.2em">{{ object.description }}</p>
+        </div>
+        <div class="card-footer">
+            <p class="text-muted">
+            {% for category in object.category.all %}
+                {{ category.category_title }}
+                {% endfor %}
+            </p>
+        </div>
+    </div>
+
+
+</div>
+
+
+{% endblock %}

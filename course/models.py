@@ -5,6 +5,9 @@ from django.db import models
 class Category(models.Model):
     category_title = models.CharField(max_length=50)
 
+    def __str__(self):
+        return f"Category {self.category_title}"
+
 
 class Homework(models.Model):
     title = models.CharField(max_length=50)
@@ -14,23 +17,29 @@ class Homework(models.Model):
     deadline = models.DateTimeField()
     course = models.ForeignKey('Course', on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"Homework {self.title} for {self.course}"
+
 
 class Course(models.Model):
-    STATUS_END = "E"
-    STATUS_NOW = "N"
+    STATUS_NOW = "In progress"
+    STATUS_WAIT = "Wait for group"
 
     STATUS_CHOICES = [
-        (STATUS_END, "Курс пройден"),
         (STATUS_NOW, "Курс идет"),
+        (STATUS_WAIT, "Набор группы")
         ]
 
     title = models.CharField(max_length=50)
     description = models.TextField(blank=True)
     duration = models.IntegerField()
-    start = models.DateTimeField()
+    start = models.DateField()
     price = models.DecimalField(max_digits=8, decimal_places=2)
-    category = models.ForeignKey(Category, on_delete=models.PROTECT)
-    status = models.CharField(choices=STATUS_CHOICES, max_length=1)
+    category = models.ManyToManyField(Category, related_name="course")
+    status = models.CharField(choices=STATUS_CHOICES, max_length=16)
+
+    def __str__(self):
+        return f"Course {self.title}"
 
 
 class Webinar(models.Model):
@@ -38,6 +47,9 @@ class Webinar(models.Model):
     description = models.TextField(blank=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     date = models.DateTimeField()
+
+    def __str__(self):
+        return f"Webinar {self.theme} for {self.course}"
 
 
 class Teacher(models.Model):
