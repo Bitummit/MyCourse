@@ -36,7 +36,7 @@ class Course(models.Model):
     start = models.DateField()
     price = models.DecimalField(max_digits=8, decimal_places=2)
     category = models.ManyToManyField(Category, related_name="course")
-    status = models.CharField(choices=STATUS_CHOICES, max_length=16)
+    status = models.CharField(choices=STATUS_CHOICES, max_length=16, default=STATUS_WAIT)
 
     def __str__(self):
         return f"Course {self.title}"

@@ -20,11 +20,17 @@ class PageTitleMixin():
 class CourseListView(PageTitleMixin, ListView):
     model = Course
     page_title = "Courses"
-    courses = Course.objects.all()
-    for course in courses:
-        if course.start < datetime.date.today():
-            course.status = course.STATUS_NOW
-            course.save()
+
+    # @classmethodD
+    # def as_view(cls):
+    #
+    #     courses = Course.objects.all()
+    #     for course in courses:
+    #         if course.start < datetime.date.today():
+    #             course.status = course.STATUS_NOW
+    #             course.save()
+    #     view = super().as_view()
+    #     return view
 
 
 class CourseDetailView(PageTitleMixin, DetailView):
@@ -35,7 +41,7 @@ class CourseDetailView(PageTitleMixin, DetailView):
 class CourseCreateView(PageTitleMixin, CreateView):
     model = Course
     success_url = reverse_lazy("course:course_list")
-    fields = "__all__"
+    form_class = ArticleCreateViewForm
 
 
 class CourseDeleteView(PageTitleMixin, DeleteView):
