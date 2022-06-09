@@ -21,16 +21,14 @@ class CourseListView(PageTitleMixin, ListView):
     model = Course
     page_title = "Courses"
 
-    # @classmethodD
-    # def as_view(cls):
-    #
-    #     courses = Course.objects.all()
-    #     for course in courses:
-    #         if course.start < datetime.date.today():
-    #             course.status = course.STATUS_NOW
-    #             course.save()
-    #     view = super().as_view()
-    #     return view
+    def get_queryset(self):
+        qs = super().get_queryset()
+        courses = Course.objects.all()
+        for course in courses:
+            if course.start < datetime.date.today():
+                course.status = course.STATUS_NOW
+                course.save()
+        return qs
 
 
 class CourseDetailView(PageTitleMixin, DetailView):
