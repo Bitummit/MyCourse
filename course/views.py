@@ -23,11 +23,24 @@ class CourseListView(PageTitleMixin, ListView):
 
     def get_queryset(self):
         qs = super().get_queryset()
-        courses = Course.objects.all()
+        # courses = Course.objects.all()
+        # for course in courses:
+        #     if course.start < datetime.date.today():
+        #         course.status = course.STATUS_NOW
+        #         course.save()
+        courses = Course.objects.filter(
+            start__lte=datetime.date.today(),
+            status=Course.STATUS_WAIT).only(
+            'status',
+            'title',
+            'description',
+            'start',
+            'category'
+        )
         for course in courses:
-            if course.start < datetime.date.today():
-                course.status = course.STATUS_NOW
-                course.save()
+            course.status = Course.STATUS_NOW
+        courses.bulk_update(courses, ['status'])
+        qs = qs.prefetch_related('category')
         return qs
 
 

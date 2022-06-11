@@ -14,9 +14,14 @@
 
                     <div class="card-body">
                         <h5 class="card-title">{{ course.title }}</h5>
-                        <p class="card-text">{{ course.description }}</p>
+                        <p class="card-text">{{ course.get_short_desc }}</p>
                         <p><a class="btn btn-primary" href="{% url "course:course_detail" pk=course.pk %}" role="button">More</a>
                             <a class="btn btn-danger" href="{% url "course:course_delete" pk=course.pk %}" role="button">Delete</a></p>
+                        <p class="text-muted">
+                            {% for ct in course.category.all %}
+                            {{ ct.category_title }}
+                            {% endfor %}
+                            </p>
                     </div>
                     <div class="card-footer">
                         <small class="text-muted"> Start: {{ course.start }} Status: {{ course.status }}</small>

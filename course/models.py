@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.utils.functional import cached_property
 
 
 class Category(models.Model):
@@ -40,6 +41,10 @@ class Course(models.Model):
 
     def __str__(self):
         return f"Course {self.title}"
+
+    @cached_property
+    def get_short_desc(self):
+        return f'{self.description[:20]}...'
 
 
 class Webinar(models.Model):
