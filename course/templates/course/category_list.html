@@ -1,0 +1,16 @@
+{% extends 'root.html' %}
+
+{% block content %}
+    <div class="card mt-5">
+
+        {% for category in object_list %}
+            <div class="card mt-3 mb-1 ml-3 mr-3">
+                <div class="card-body text-center">
+                    <a href="{% url 'course:course_list_by_tag' category_id=category.id %}">
+                        {{ category.category_title }}
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,11 +1,11 @@
 import datetime
 
-from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, DeleteView
-
+from django.shortcuts import get_object_or_404, render
 from course.forms import ArticleCreateViewForm
-from course.models import Course
+from course.models import Course, Category
 
 
 class PageTitleMixin():
@@ -23,11 +23,6 @@ class CourseListView(PageTitleMixin, ListView):
 
     def get_queryset(self):
         qs = super().get_queryset()
-        # courses = Course.objects.all()
-        # for course in courses:
-        #     if course.start < datetime.date.today():
-        #         course.status = course.STATUS_NOW
-        #         course.save()
         courses = Course.objects.filter(
             start__lte=datetime.date.today(),
             status=Course.STATUS_WAIT).only(
@@ -58,3 +53,21 @@ class CourseCreateView(PageTitleMixin, CreateView):
 class CourseDeleteView(PageTitleMixin, DeleteView):
     model = Course
     success_url = reverse_lazy('course:course_list')
+
+
+class CategoryListView(PageTitleMixin, ListView):
+    model = Category
+    page_title = "Tags"
+
+
+class CourseListByTagView(View):
+
+    def get(self, request, category_id):
+        courses = Course.objects.filter(category=category_id)
+        category = get_object_or_404(Category, pk=category_id)
+
+        courses = courses.prefetch_related('category')
+
+        context = {'object_list': courses, 'category': category}
+        return render(request, 'course/course_list_by_tag.html', context=context)
+
