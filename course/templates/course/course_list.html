@@ -12,13 +12,15 @@
 
             {% for course in object_list %}
                 <div class="col-md-4">
-                <div class="card mt-5 ml-3 ">
+                <div class="card mt-5 ml-3 mb-1">
 
                     <div class="card-body">
                         <h5 class="card-title">{{ course.title }}</h5>
                         <p class="card-text">{{ course.get_short_desc }}</p>
                         <p><a class="btn btn-primary" href="{% url "course:course_detail" pk=course.pk %}" role="button">More</a>
-                            <a class="btn btn-danger" href="{% url "course:course_delete" pk=course.pk %}" role="button">Delete</a></p>
+                            <a class="btn btn-danger" href="{% url "course:course_delete" pk=course.pk %}" role="button">Delete</a>
+                            <a class="btn btn-warning" href="{% url "course:course_update" pk=course.pk %}" role="button">Change</a>
+                        </p>
                         <p class="text-muted">
                             {% for ct in course.category.all %}
                                 <a href="{% url 'course:course_list_by_tag' category_id=ct.id %}">{{ ct.category_title }}</a>

@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 from django.db import models
 from django.utils.functional import cached_property
 
@@ -38,6 +39,7 @@ class Course(models.Model):
     price = models.DecimalField(max_digits=8, decimal_places=2)
     category = models.ManyToManyField(Category, related_name="course")
     status = models.CharField(choices=STATUS_CHOICES, max_length=16, default=STATUS_WAIT)
+    teachers = models.ManyToManyField('Teacher', related_name='courses', default=None)
 
     def __str__(self):
         return f"Course {self.title}"
@@ -58,13 +60,16 @@ class Webinar(models.Model):
 
 
 class Teacher(models.Model):
-    user = models.ForeignKey(get_user_model(), on_delete=models.PROTECT)
+    user = models.OneToOneField(User, on_delete=models.PROTECT)
     about_me = models.TextField(blank=True)
+
+    def __str__(self):
+        return f'{self.user.first_name} {self.user.last_name}'
 
 
 class Student(models.Model):
-    user = models.ForeignKey(get_user_model(), on_delete=models.PROTECT)
-    courses = models.ManyToManyField(Course)
+    user = models.OneToOneField(User, on_delete=models.PROTECT)
+    courses = models.ManyToManyField(Course, related_name='students')
     country = models.CharField(max_length=100)
 
 

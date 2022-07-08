@@ -1,0 +1,17 @@
+{% extends 'course/teacher_list.html' %}
+{% block info %}
+    <div class="card mt-3 mb-1 ml-3 mr-3">
+        <div class="card-body">
+            <h5 class="card-title">{{ object.user.first_name }} {{ object.user.last_name }}</h5>
+            <p class="card-text">{{ object.about_me }}</p>
+            <p class="card-text"><b>Courses:</b>
+                {% for course in object.courses.all %}
+                    <a href="{% url 'course:course_detail' pk=course.id %}">{{ course.title }}</a>
+                    {% if course.next %}
+                        ,
+                    {% endif %}
+                {% endfor %}
+            </p>
+        </div>
+    </div>
+{% endblock %}

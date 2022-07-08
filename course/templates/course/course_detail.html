@@ -6,15 +6,24 @@
     <div class="card mt-5">
         <div class="card-body">
             <h1 class="card-title text-center"> Course "{{ object.title }}"</h1>
-            <p class="card-text mt-3 ms-3" style="font-size: 1.2em">Duration: {{ object.duration }} months</p>
-            <p class="card-text mt-3 ms-3" style="font-size: 1.2em">Start: {{ object.start }} </p>
-            <p class="card-text mt-3 ms-3" style="font-size: 1.2em">Price: {{ object.price }} rub</p>
+            <p class="card-text mt-3 ms-3" style="font-size: 1.2em"><b>Duration:</b> {{ object.duration }} months</p>
+            <p class="card-text mt-3 ms-3" style="font-size: 1.2em"><b>Start:</b> {{ object.start }} </p>
+            <p class="card-text mt-3 ms-3" style="font-size: 1.2em"><b>Price:</b> {{ object.price }} rub</p>
             <p class="card-text mt-3 ms-3" style="font-size: 1.2em">{{ object.description }}</p>
+            <p class="card-text mt-3 ms-3" style="font-size: 1.2em">
+                <b>Teachers:</b>
+                {% for teacher in object.teachers.all %}
+                <a href="{% url 'course:teacher_detail' pk=teacher.id %}">{{ teacher }}</a>
+                    {% if teacher.next %}
+                        //
+                    {% endif %}
+                {% endfor %}
+            </p>
         </div>
         <div class="card-footer">
             <p class="text-muted">
             {% for category in object.category.all %}
-                {{ category.category_title }}
+                <a href="{% url "course:course_list_by_tag" category_id=category.id %}">{{ category.category_title }}</a>
                 {% endfor %}
             </p>
         </div>

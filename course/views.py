@@ -2,10 +2,10 @@ import datetime
 
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import ListView, DetailView, CreateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
 from django.shortcuts import get_object_or_404, render
-from course.forms import ArticleCreateViewForm
-from course.models import Course, Category
+from course.forms import CourseCreateViewForm, TeacherCreateViewForm
+from course.models import Course, Category, Teacher
 
 
 class PageTitleMixin():
@@ -43,11 +43,22 @@ class CourseDetailView(PageTitleMixin, DetailView):
     model = Course
     page_title = "About Course"
 
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.prefetch_related('teachers', 'teachers__user')
+        return qs
+
 
 class CourseCreateView(PageTitleMixin, CreateView):
     model = Course
     success_url = reverse_lazy("course:course_list")
-    form_class = ArticleCreateViewForm
+    form_class = CourseCreateViewForm
+
+
+class CourseUpdateView(PageTitleMixin, UpdateView):
+    model = Course
+    success_url = reverse_lazy("course:course_list")
+    form_class = CourseCreateViewForm
 
 
 class CourseDeleteView(PageTitleMixin, DeleteView):
@@ -68,6 +79,33 @@ class CourseListByTagView(View):
 
         courses = courses.prefetch_related('category')
 
-        context = {'object_list': courses, 'category': category}
+        context = {'object_list': courses, 'category': category, 'page_title': f'Tag "{category.category_title}"'}
         return render(request, 'course/course_list_by_tag.html', context=context)
+
+
+class TeacherListView(PageTitleMixin, ListView):
+    model = Teacher
+    page_title = "Teachers"
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.prefetch_related('courses').select_related('user')
+        return qs
+
+
+class TeacherCreateView(PageTitleMixin, CreateView):
+    model = Teacher
+    page_title = "Create Teacher"
+    form_class = TeacherCreateViewForm
+    success_url = reverse_lazy("course:teacher_list")
+
+
+class TeacherDetailView(PageTitleMixin, DetailView):
+    model = Teacher
+    page_title = "About Teacher"
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.prefetch_related('courses').select_related('user')
+        return qs
 
