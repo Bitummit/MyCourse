@@ -2,12 +2,14 @@
 
 {% block content %}
     <div class="card mt-5">
+        {% if perms.auth.create_teacher %}
         <a class="btn btn-outline-success mt-3 ml-5 mr-5" href="{% url 'course:teacher_create' %}" role="button">Create teacher</a>
+        {% endif %}
     {% block info %}
         {% for teacher in object_list %}
             <div class="card mt-3 mb-1 ml-3 mr-3">
                 <div class="card-body">
-                    <h5 class="card-title">{{ teacher.user.first_name}} {{ teacher.user.last_name }}</h5>
+                    <h5 class="card-title">{{ teacher }}</h5>
                     <p class="card-text">{{ teacher.about_me }}</p>
                     <p class="card-text"><b>Courses:</b>
                     {% for course in teacher.courses.all %}

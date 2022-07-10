@@ -1,5 +1,6 @@
 import datetime
 
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
@@ -45,7 +46,7 @@ class CourseDetailView(PageTitleMixin, DetailView):
 
     def get_queryset(self):
         qs = super().get_queryset()
-        qs = qs.prefetch_related('teachers', 'teachers__user')
+        qs = qs.prefetch_related('teachers', 'teachers__profile', 'teachers__profile__user')
         return qs
 
 
@@ -84,12 +85,16 @@ class CourseListByTagView(View):
 
 
 class TeacherListView(PageTitleMixin, ListView):
+
     model = Teacher
     page_title = "Teachers"
 
     def get_queryset(self):
         qs = super().get_queryset()
-        qs = qs.prefetch_related('courses').select_related('user')
+        for teacher in qs:
+            teacher.profile.is_teacher = True
+            teacher.profile.save()
+        qs = qs.prefetch_related('courses').select_related('profile', 'profile__user')
         return qs
 
 
@@ -106,6 +111,5 @@ class TeacherDetailView(PageTitleMixin, DetailView):
 
     def get_queryset(self):
         qs = super().get_queryset()
-        qs = qs.prefetch_related('courses').select_related('user')
+        qs = qs.prefetch_related('courses').select_related('profile', 'profile__user')
         return qs
-

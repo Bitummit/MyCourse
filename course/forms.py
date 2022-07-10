@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.models import User
 from django.forms import ModelForm
 
 from course.models import Course, Teacher
@@ -20,4 +21,4 @@ class CourseCreateViewForm(ModelForm):
 class TeacherCreateViewForm(ModelForm):
     class Meta:
         model = Teacher
-        fields = ('user', 'about_me')
+        fields = ('profile',)

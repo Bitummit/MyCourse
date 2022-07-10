@@ -5,9 +5,9 @@
         {% endblock %}
 
     <div class="card mt-5">
-
+        {% if perms.auth.create_course %}
         <a class="btn btn-outline-success mt-3 ml-5 mr-5" href="{% url "course:course_create" %}" role="button">Create course</a>
-
+        {% endif %}
         <div class="card-group">
 
             {% for course in object_list %}
@@ -18,8 +18,10 @@
                         <h5 class="card-title">{{ course.title }}</h5>
                         <p class="card-text">{{ course.get_short_desc }}</p>
                         <p><a class="btn btn-primary" href="{% url "course:course_detail" pk=course.pk %}" role="button">More</a>
+                            {% if perms.auth.delete_course %}
                             <a class="btn btn-danger" href="{% url "course:course_delete" pk=course.pk %}" role="button">Delete</a>
                             <a class="btn btn-warning" href="{% url "course:course_update" pk=course.pk %}" role="button">Change</a>
+                            {% endif %}
                         </p>
                         <p class="text-muted">
                             {% for ct in course.category.all %}

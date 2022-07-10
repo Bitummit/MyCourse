@@ -1,7 +1,8 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 import course.views as course
+from course.api.routers import router
 
 app_name = "course"
 
@@ -18,4 +19,6 @@ urlpatterns = [
     path('teachers/', course.TeacherListView.as_view(), name="teacher_list"),
     path('teachers/create/', course.TeacherCreateView.as_view(), name="teacher_create"),
     path('teachers/<int:pk>/', course.TeacherDetailView.as_view(), name="teacher_detail"),
+
+    path('api/', include(router.urls)),
 ]

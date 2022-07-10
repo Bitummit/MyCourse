@@ -11,11 +11,16 @@ class Category(models.Model):
         return f"Category {self.category_title}"
 
 
-class Homework(models.Model):
-    title = models.CharField(max_length=50)
-    task = models.TextField(blank=True)
+class AnswerTask(models.Model):
     answer_as_text = models.TextField()
     answer_as_file = models.FileField()
+    task = models.ForeignKey('Task', on_delete=models.CASCADE)
+    user = models.ManyToManyField('UserProfile', related_name='answers')
+
+
+class Task(models.Model):
+    title = models.CharField(max_length=50)
+    task = models.TextField(blank=True)
     deadline = models.DateTimeField()
     course = models.ForeignKey('Course', on_delete=models.CASCADE)
 
@@ -60,17 +65,26 @@ class Webinar(models.Model):
 
 
 class Teacher(models.Model):
-    user = models.OneToOneField(User, on_delete=models.PROTECT)
+    profile = models.OneToOneField('UserProfile', on_delete=models.PROTECT, default=None)
     about_me = models.TextField(blank=True)
 
     def __str__(self):
-        return f'{self.user.first_name} {self.user.last_name}'
+        return f'{self.profile.user.first_name} {self.profile.user.last_name}'
 
 
 class Student(models.Model):
-    user = models.OneToOneField(User, on_delete=models.PROTECT)
+    profile = models.OneToOneField('UserProfile', on_delete=models.PROTECT, default=None)
     courses = models.ManyToManyField(Course, related_name='students')
-    country = models.CharField(max_length=100)
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+    location = models.CharField(max_length=30, blank=True)
+    date_joined = models.DateTimeField(auto_now_add=True)
+    is_teacher = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.user.username
 
 
 
