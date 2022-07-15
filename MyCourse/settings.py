@@ -16,9 +16,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # other apps
     'crispy_forms',
     'rest_framework',
     'rest_framework.authtoken',
+    "graphene_django",
+    # my apps
     'course',
 ]
 
@@ -113,5 +116,11 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ]
+}
+
+
+GRAPHENE = {
+    "SCHEMA": "MyCourse.schema.schema"
 }
