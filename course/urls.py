@@ -21,4 +21,7 @@ urlpatterns = [
     path('teachers/<int:pk>/', course.TeacherDetailView.as_view(), name="teacher_detail"),
 
     path('api/', include(router.urls)),
+
+    path('test/', course.CourseAPIListView.as_view(), name="test"),
+
 ]

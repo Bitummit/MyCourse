@@ -85,7 +85,6 @@ class CourseListByTagView(View):
 
 
 class TeacherListView(PageTitleMixin, ListView):
-
     model = Teacher
     page_title = "Teachers"
 
@@ -113,3 +112,9 @@ class TeacherDetailView(PageTitleMixin, DetailView):
         qs = super().get_queryset()
         qs = qs.prefetch_related('courses').select_related('profile', 'profile__user')
         return qs
+
+
+class CourseAPIListView(PageTitleMixin, ListView):
+    model = Course
+    page_title = "Courses"
+    template_name = "course/test.html"

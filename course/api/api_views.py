@@ -1,10 +1,14 @@
-
 from rest_framework import viewsets
-
-
-from course.api.serializers import TaskSerializer, WebinarSerializer
-
-from course.models import Task, Webinar
+from course.api.serializers import (
+    TaskSerializer,
+    WebinarSerializer,
+    CourseSerializer
+)
+from course.models import (
+    Task,
+    Webinar,
+    Course
+)
 
 
 class TaskViewSet(viewsets.ModelViewSet):
@@ -17,4 +21,7 @@ class WebinarViewSet(viewsets.ModelViewSet):
     serializer_class = WebinarSerializer
 
 
+class CourseViewSet(viewsets.ModelViewSet):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
 

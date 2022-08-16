@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     "graphene_django",
     # my apps
     'course',
+    'frontend',
 ]
 
 if DEBUG:
@@ -101,6 +102,7 @@ INTERNAL_IPS = [
 ]
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
