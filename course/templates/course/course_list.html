@@ -2,11 +2,12 @@
 
 {% block content %}
     {% block tag %}
-        {% endblock %}
+    {% endblock %}
 
     <div class="card mt-5">
         {% if perms.auth.create_course %}
-        <a class="btn btn-outline-success mt-3 ml-5 mr-5" href="{% url "course:course_create" %}" role="button">Create course</a>
+            <a class="btn btn-outline-success mt-3 ml-5 mr-5" href="{% url "course:course_create" %}" role="button">Create
+                course</a>
         {% endif %}
         <div class="card-group">
 

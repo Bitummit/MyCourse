@@ -1,0 +1,25 @@
+{% extends 'root.html' %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+<div class="container">
+<h1 class="text-center">Contact us</h1>
+    <p> Email: ignat.700@mail.ru </p>
+    <br>
+
+
+    <form method="post">
+    {% csrf_token %}
+        <p>{{ form|crispy }}</p>
+        <p>
+            <input class="btn btn-outline-success" type="submit" value="Save">
+        </p>
+    </form>
+
+
+</div>
+
+{% endblock %}

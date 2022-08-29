@@ -24,4 +24,6 @@ urlpatterns = [
 
     path('test/', course.CourseAPIListView.as_view(), name="test"),
 
+    path('contacts', course.SendMailView.as_view(), name="contacts"),
+
 ]

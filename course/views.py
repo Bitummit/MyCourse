@@ -1,12 +1,14 @@
 import datetime
 
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
 from django.shortcuts import get_object_or_404, render
-from course.forms import CourseCreateViewForm, TeacherCreateViewForm
+from course.forms import CourseCreateViewForm, TeacherCreateViewForm, SendMailForm
 from course.models import Course, Category, Teacher
+from course.tasks import send_mail_to_us_task, send_mail_to_user_task
 
 
 class PageTitleMixin():
@@ -118,3 +120,25 @@ class CourseAPIListView(PageTitleMixin, ListView):
     model = Course
     page_title = "Courses"
     template_name = "course/test.html"
+
+
+class SendMailView(View):
+    def get(self, request):
+        form = SendMailForm()
+        context = {'form': form, }
+        return render(request, 'course/contacts.html', context=context)
+
+    def post(self, request):
+        form = SendMailForm(request.POST)
+
+        if form.is_valid():
+            message = form.cleaned_data['message']
+            user_email = form.cleaned_data['user_mail']
+            subject = form.cleaned_data['subject']
+            send_mail_to_us_task.delay(subject, message, user_email)
+            send_mail_to_user_task.delay(user_email)
+
+            return HttpResponseRedirect('/')
+
+        return HttpResponseRedirect('contacts/')
+
